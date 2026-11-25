@@ -19,8 +19,6 @@
       --red-bg: #fee2e2;
       --red-border: #dc2626;
       --red-text: #7f1d1d;
-      --warn-bg: #fef3c7;
-      --warn-text: #92400e;
     }
 
     * {
@@ -67,7 +65,7 @@
     .stats {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
       font-size: 0.92rem;
       font-weight: 600;
     }
@@ -76,6 +74,15 @@
       background: rgba(255, 255, 255, 0.16);
       padding: 4px 12px;
       border-radius: 999px;
+    }
+
+    .pill.grade-pill {
+      background: #16a34a;
+      display: none;
+    }
+
+    .pill.grade-pill.fail {
+      background: #dc2626;
     }
 
     .progress-track {
@@ -311,6 +318,12 @@
       color: #7c2d12;
     }
 
+    .feedback.blank {
+      background: #f1f5f9;
+      border-left: 4px solid var(--muted);
+      color: var(--text);
+    }
+
     .feedback .ref {
       display: block;
       margin-top: 6px;
@@ -319,29 +332,94 @@
       font-style: italic;
     }
 
-    /* Panel final de resultados */
+    /* Caja de finalización */
+    .finish-box {
+      text-align: center;
+      padding: 28px 24px;
+    }
+
+    .finish-box p {
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+    }
+
+    /* Panel final de resultados (oculto hasta finalizar) */
     .summary-card {
+      display: none;
       border: 2px solid var(--primary);
       text-align: center;
     }
 
+    .summary-card.show {
+      display: block;
+    }
+
     .summary-card h2 {
       color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .grade-badge {
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
       margin-bottom: 10px;
     }
 
+    .grade-badge.pass {
+      background: var(--green-bg);
+      color: var(--green-text);
+      border: 1px solid var(--green-border);
+    }
+
+    .grade-badge.fail {
+      background: var(--red-bg);
+      color: var(--red-text);
+      border: 1px solid var(--red-border);
+    }
+
     .big-score {
-      font-size: 2.6rem;
+      font-size: 3.1rem;
       font-weight: 800;
       color: var(--primary);
+      line-height: 1.1;
       margin: 6px 0;
+    }
+
+    .big-score.pass {
+      color: var(--green-border);
+    }
+
+    .big-score.fail {
+      color: var(--red-border);
+    }
+
+    .score-breakdown {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin: 14px 0 20px;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .score-chip {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-weight: 600;
     }
 
     .block-scores {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
       gap: 12px;
-      margin: 20px 0;
+      margin: 18px 0 22px;
       text-align: left;
     }
 
@@ -350,7 +428,7 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 12px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
 
     .block-stat strong {
@@ -359,31 +437,48 @@
       margin-bottom: 4px;
     }
 
+    .block-stat .b-grade {
+      margin-top: 4px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
     .actions {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 12px;
-      margin-top: 18px;
+      margin-top: 10px;
     }
 
     .btn {
       border: none;
       border-radius: 8px;
-      padding: 11px 20px;
-      font-size: 0.95rem;
+      padding: 12px 22px;
+      font-size: 0.96rem;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, transform 0.1s;
     }
 
     .btn:hover {
-      opacity: 0.9;
+      opacity: 0.92;
+    }
+
+    .btn:active {
+      transform: scale(0.99);
     }
 
     .btn-primary {
       background: var(--primary);
       color: #fff;
+    }
+
+    .btn-success {
+      background: var(--green-border);
+      color: #fff;
+      font-size: 1.02rem;
+      padding: 13px 28px;
     }
 
     .btn-secondary {
@@ -399,10 +494,13 @@
         gap: 8px;
         font-size: 0.82rem;
       }
+      .big-score {
+        font-size: 2.5rem;
+      }
     }
 
     @media print {
-      .topbar, .actions {
+      .topbar, .actions, .finish-box {
         display: none !important;
       }
       body {
@@ -422,7 +520,7 @@
       <div class="brand">NC Plagas · Control de Legionella</div>
       <div class="stats">
         <span class="pill" id="answeredCount">Respondidas: 0 / 30</span>
-        <span class="pill" id="scoreCount">Aciertos: 0</span>
+        <span class="pill grade-pill" id="topGradePill">Nota: 0,00 / 10</span>
         <span class="pill" id="timerDisplay">⏱ 45:00</span>
       </div>
     </div>
@@ -451,18 +549,33 @@
         <strong>Instrucciones:</strong>
         <ul>
           <li>El examen consta de <strong>30 preguntas</strong> tipo test divididas en 4 bloques. Tiempo orientativo: <strong>45 minutos</strong>.</li>
-          <li>Cada acierto vale <strong>1 punto</strong>. Las respuestas incorrectas y en blanco valen <strong>0 puntos</strong> (máximo 30 puntos).</li>
-          <li>Al pulsar una opción, la <strong>respuesta correcta se marcará en verde</strong> inmediatamente junto con su justificación técnica.</li>
+          <li>Cada acierto suma <strong>1 punto</strong>. Las respuestas incorrectas y en blanco valen <strong>0 puntos</strong>.</li>
+          <li>Al pulsar una opción, la <strong>respuesta correcta se marcará en verde</strong>. La <strong>nota final de 0 a 10</strong> se calculará al finalizar el examen.</li>
         </ul>
       </div>
     </section>
 
     <div id="quizContainer"></div>
 
+    <!-- Botón para finalizar examen -->
+    <section class="card finish-box" id="finishBox">
+      <p id="finishHint">Cuando hayas respondido todas las preguntas, pulsa el botón para finalizar el examen y obtener tu nota sobre 10.</p>
+      <button class="btn btn-success" onclick="finishExam(false)">Finalizar examen y calcular nota</button>
+    </section>
+
+    <!-- Panel de calificación final (solo visible al terminar) -->
     <section class="card summary-card" id="summaryCard">
-      <h2>Resumen de resultados</h2>
-      <div class="big-score" id="finalScore">0 / 30</div>
-      <p id="finalStatus" style="color: var(--muted);">Responde a las preguntas para calcular tu puntuación final.</p>
+      <h2>Resultado Final del Examen</h2>
+      <div id="operarioSummary" style="color: var(--muted); font-size: 0.95rem; margin-bottom: 10px;"></div>
+      <div class="grade-badge" id="gradeBadge"></div>
+      <div class="big-score" id="finalGrade10">0,00 / 10</div>
+
+      <div class="score-breakdown">
+        <span class="score-chip" id="statHits">Aciertos: 0 / 30</span>
+        <span class="score-chip" id="statWrong">Errores: 0</span>
+        <span class="score-chip" id="statBlank">En blanco: 0</span>
+        <span class="score-chip" id="statTime">Tiempo: 00:00</span>
+      </div>
 
       <div class="block-scores" id="blockScores"></div>
 
@@ -639,7 +752,7 @@
         ],
         correct: 1,
         justification: "El agua ajena a red de consumo exige tratamiento frente a Legionella y adecuación a fabricantes; al ser agua regenerada, el análisis de Legionella spp. es mensual conforme al RD 1620/2007.",
-        ref: "RD 487/2022, Anexo III y Anexo V (Tabla 3); Guía práctica PSL, Apdo. 10.2"
+        ref: "RD 487/2022, Anexo III y Anexo V (Tabla 3); Manual PSL, Apdo. 10.2"
       },
       {
         id: 13, block: 2,
@@ -771,7 +884,7 @@
         ],
         correct: 2,
         justification: "Toda desviación de desinfectante e incidencia debe registrarse y comunicarse al responsable técnico; solo pueden usarse biocidas autorizados/registrados y validados previamente (registro, ficha técnica y FDS).",
-        ref: "RD 487/2022, art. 16; Guía práctica PSL (Programas de tratamiento y proveedores)"
+        ref: "RD 487/2022, art. 16; Manual PSL (Programas de tratamiento y proveedores)"
       },
 
       // BLOQUE 4 (23-30)
@@ -881,35 +994,54 @@
       }
     ];
 
+    const TOTAL_SECONDS = 45 * 60;
     const letters = ["A", "B", "C", "D"];
     let userAnswers = {};
-    let secondsLeft = 45 * 60;
+    let secondsLeft = TOTAL_SECONDS;
     let timerInterval = null;
+    let examFinished = false;
 
     function initDate() {
       const today = new Date().toISOString().split("T")[0];
       document.getElementById("fecha").value = today;
     }
 
+    function formatTime(totalSec) {
+      const m = String(Math.floor(totalSec / 60)).padStart(2, "0");
+      const s = String(totalSec % 60).padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    function formatGrade(value) {
+      return value.toFixed(2).replace(".", ",");
+    }
+
+    function getQualification(grade10) {
+      if (grade10 >= 9) return { label: "SOBRESALIENTE · APTO", pass: true };
+      if (grade10 >= 7) return { label: "NOTABLE · APTO", pass: true };
+      if (grade10 >= 6) return { label: "BIEN · APTO", pass: true };
+      if (grade10 >= 5) return { label: "SUFICIENTE · APTO", pass: true };
+      return { label: "INSUFICIENTE · NO APTO", pass: false };
+    }
+
     function startTimer() {
       clearInterval(timerInterval);
-      secondsLeft = 45 * 60;
-      updateTimerText();
+      secondsLeft = TOTAL_SECONDS;
+      document.getElementById("timerDisplay").textContent = `⏱ ${formatTime(secondsLeft)}`;
       timerInterval = setInterval(() => {
+        if (examFinished) {
+          clearInterval(timerInterval);
+          return;
+        }
         if (secondsLeft > 0) {
           secondsLeft--;
-          updateTimerText();
+          document.getElementById("timerDisplay").textContent = `⏱ ${formatTime(secondsLeft)}`;
         } else {
           clearInterval(timerInterval);
           document.getElementById("timerDisplay").textContent = "⏱ Tiempo agotado";
+          finishExam(true);
         }
       }, 1000);
-    }
-
-    function updateTimerText() {
-      const m = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
-      const s = String(secondsLeft % 60).padStart(2, "0");
-      document.getElementById("timerDisplay").textContent = `⏱ ${m}:${s}`;
     }
 
     function renderQuiz() {
@@ -950,11 +1082,11 @@
         });
       });
 
-      updateSummary();
+      updateProgress();
     }
 
     function selectOption(qId, selectedIdx) {
-      if (userAnswers[qId] !== undefined) return; // Bloquea cambio tras responder
+      if (examFinished || userAnswers[qId] !== undefined) return;
 
       const q = questions.find((item) => item.id === qId);
       userAnswers[qId] = selectedIdx;
@@ -982,55 +1114,138 @@
         <span class="ref">Referencia: ${q.ref}</span>
       `;
 
-      updateSummary();
+      updateProgress();
+
+      // Si completa las 30 preguntas, calcula y muestra la nota automáticamente
+      if (Object.keys(userAnswers).length === questions.length) {
+        finishExam(true);
+      }
     }
 
-    function updateSummary() {
-      const answeredKeys = Object.keys(userAnswers);
-      const answeredTotal = answeredKeys.length;
-      let score = 0;
+    function updateProgress() {
+      const answeredTotal = Object.keys(userAnswers).length;
+      document.getElementById("answeredCount").textContent = `Respondidas: ${answeredTotal} / ${questions.length}`;
+      document.getElementById("progressBar").style.width = `${(answeredTotal / questions.length) * 100}%`;
 
+      const remaining = questions.length - answeredTotal;
+      const hint = document.getElementById("finishHint");
+      if (remaining > 0) {
+        hint.textContent = `Te faltan ${remaining} preguntas por responder. Puedes completarlas o finalizar ahora (las preguntas en blanco valen 0 puntos).`;
+      } else {
+        hint.textContent = "Has respondido a todas las preguntas.";
+      }
+    }
+
+    function finishExam(autoTriggered) {
+      if (examFinished) return;
+
+      const answeredTotal = Object.keys(userAnswers).length;
+      const unanswered = questions.length - answeredTotal;
+
+      if (!autoTriggered && unanswered > 0) {
+        const proceed = confirm(
+          `Te quedan ${unanswered} preguntas sin responder (puntuarán 0 puntos). ¿Deseas finalizar el examen y calcular tu nota ahora?`
+        );
+        if (!proceed) return;
+      }
+
+      examFinished = true;
+      clearInterval(timerInterval);
+
+      let hits = 0;
+      let wrong = 0;
+      let blank = 0;
       const blockHits = { 1: 0, 2: 0, 3: 0, 4: 0 };
 
       questions.forEach((q) => {
-        if (userAnswers[q.id] === q.correct) {
-          score++;
+        const ans = userAnswers[q.id];
+        if (ans === undefined) {
+          blank++;
+          // Bloquea y muestra la respuesta correcta en verde para revisión
+          const card = document.getElementById(`q-${q.id}`);
+          const buttons = card.querySelectorAll(".option-btn");
+          buttons.forEach((btn, idx) => {
+            btn.disabled = true;
+            if (idx === q.correct) {
+              btn.classList.add("correct");
+            } else {
+              btn.classList.add("dimmed");
+            }
+          });
+          const fb = document.getElementById(`fb-${q.id}`);
+          fb.className = "feedback show blank";
+          fb.innerHTML = `
+            <strong>— Sin responder (0 puntos). La respuesta correcta es la ${letters[q.correct]}.</strong>
+            ${q.justification}
+            <span class="ref">Referencia: ${q.ref}</span>
+          `;
+        } else if (ans === q.correct) {
+          hits++;
           blockHits[q.block]++;
+        } else {
+          wrong++;
         }
       });
 
-      document.getElementById("answeredCount").textContent = `Respondidas: ${answeredTotal} / ${questions.length}`;
-      document.getElementById("scoreCount").textContent = `Aciertos: ${score}`;
-      document.getElementById("progressBar").style.width = `${(answeredTotal / questions.length) * 100}%`;
+      const grade10 = (hits / questions.length) * 10;
+      const qual = getQualification(grade10);
+      const elapsedSec = TOTAL_SECONDS - secondsLeft;
 
-      document.getElementById("finalScore").textContent = `${score} / ${questions.length}`;
-      const pct = Math.round((score / questions.length) * 100);
+      // Mostrar nota en la barra superior
+      const topPill = document.getElementById("topGradePill");
+      topPill.textContent = `Nota: ${formatGrade(grade10)} / 10`;
+      topPill.className = `pill grade-pill ${qual.pass ? "" : "fail"}`;
+      topPill.style.display = "inline-block";
 
-      if (answeredTotal === 0) {
-        document.getElementById("finalStatus").textContent = "Responde a las preguntas para calcular tu puntuación final.";
-      } else if (answeredTotal < questions.length) {
-        document.getElementById("finalStatus").textContent = `Progreso actual: ${answeredTotal} de ${questions.length} preguntas respondidas (${pct}% de acierto sobre el total).`;
-      } else {
-        document.getElementById("finalStatus").textContent = `Examen completado · Puntuación final: ${pct}% (${score} aciertos de ${questions.length}).`;
-      }
+      // Ocultar caja de botón finalizar y mostrar panel de resultados
+      document.getElementById("finishBox").style.display = "none";
+
+      const operario = document.getElementById("operario").value.trim();
+      const fecha = document.getElementById("fecha").value;
+      document.getElementById("operarioSummary").textContent = operario
+        ? `Operario: ${operario} · Fecha: ${fecha}`
+        : `Fecha: ${fecha}`;
+
+      const badge = document.getElementById("gradeBadge");
+      badge.textContent = qual.label;
+      badge.className = `grade-badge ${qual.pass ? "pass" : "fail"}`;
+
+      const scoreEl = document.getElementById("finalGrade10");
+      scoreEl.textContent = `${formatGrade(grade10)} / 10`;
+      scoreEl.className = `big-score ${qual.pass ? "pass" : "fail"}`;
+
+      document.getElementById("statHits").textContent = `Aciertos: ${hits} / ${questions.length}`;
+      document.getElementById("statWrong").textContent = `Errores: ${wrong}`;
+      document.getElementById("statBlank").textContent = `En blanco: ${blank}`;
+      document.getElementById("statTime").textContent = `Tiempo: ${formatTime(elapsedSec)}`;
 
       const blockScoresDiv = document.getElementById("blockScores");
       blockScoresDiv.innerHTML = blocks
-        .map(
-          (b) => `
-          <div class="block-stat">
-            <strong>${b.title.split(".")[0]}</strong>
-            ${b.title.split(". ")[1]}: <strong>${blockHits[b.id]} / ${b.count}</strong>
-          </div>`
-        )
+        .map((b) => {
+          const bGrade = (blockHits[b.id] / b.count) * 10;
+          return `
+            <div class="block-stat">
+              <strong>${b.title.split(".")[0]}</strong>
+              ${b.title.split(". ")[1]}
+              <div class="b-grade">${blockHits[b.id]} / ${b.count} aciertos (${formatGrade(bGrade)} / 10)</div>
+            </div>`;
+        })
         .join("");
+
+      const summaryCard = document.getElementById("summaryCard");
+      summaryCard.classList.add("show");
+      summaryCard.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
     function resetQuiz() {
-      if (Object.keys(userAnswers).length > 0 && !confirm("¿Seguro que quieres reiniciar todas las respuestas?")) {
+      if (!confirm("¿Seguro que quieres reiniciar el examen y borrar todas las respuestas?")) {
         return;
       }
       userAnswers = {};
+      examFinished = false;
+      document.getElementById("topGradePill").style.display = "none";
+      document.getElementById("summaryCard").classList.remove("show");
+      document.getElementById("finishBox").style.display = "block";
       renderQuiz();
       startTimer();
       window.scrollTo({ top: 0, behavior: "smooth" });
