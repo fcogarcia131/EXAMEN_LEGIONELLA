@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examen Interno Legionella — NC Plagas</title>
+  <style>
+    :root {
+      --primary: #0f4c81;
+      --primary-light: #e8f1f8;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #dce3ec;
+      --green-bg: #dcfce7;
+      --green-border: #16a34a;
+      --green-text: #14532d;
+      --red-bg: #fee2e2;
+      --red-border: #dc2626;
+      --red-text: #7f1d1d;
+      --warn-bg: #fef3c7;
+      --warn-text: #92400e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      padding-bottom: 60px;
+    }
+
+    /* Barra superior fija */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--primary);
+      color: #fff;
+      padding: 12px 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .topbar-inner {
+      max-width: 920px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand {
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.3px;
+    }
+
+    .stats {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.16);
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .progress-track {
+      max-width: 920px;
+      margin: 8px auto 0;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #4ade80;
+      transition: width 0.3s ease;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+    }
+
+    .header-card h1 {
+      font-size: 1.55rem;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.96rem;
+      margin-bottom: 18px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .field input:focus {
+      outline: 2px solid var(--primary);
+      border-color: var(--primary);
+    }
+
+    .instructions {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .instructions ul {
+      margin-left: 18px;
+      margin-top: 4px;
+    }
+
+    .block-title {
+      background: var(--primary);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      margin: 30px 0 16px;
+      font-size: 1.12rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .block-title span {
+      font-size: 0.85rem;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    .question-card {
+      padding: 20px;
+    }
+
+    .q-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .q-num {
+      flex-shrink: 0;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.9rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .q-text {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all 0.18s ease;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f8fafc;
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    .opt-letter {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #eef2f6;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    /* Estados tras responder */
+    .option-btn.correct {
+      background: var(--green-bg);
+      border-color: var(--green-border);
+      color: var(--green-text);
+      font-weight: 600;
+    }
+
+    .option-btn.correct .opt-letter {
+      background: var(--green-border);
+      color: #fff;
+    }
+
+    .option-btn.wrong {
+      background: var(--red-bg);
+      border-color: var(--red-border);
+      color: var(--red-text);
+    }
+
+    .option-btn.wrong .opt-letter {
+      background: var(--red-border);
+      color: #fff;
+    }
+
+    .option-btn.dimmed {
+      opacity: 0.6;
+    }
+
+    .feedback {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.ok {
+      background: var(--green-bg);
+      border-left: 4px solid var(--green-border);
+      color: var(--green-text);
+    }
+
+    .feedback.ko {
+      background: #fff7ed;
+      border-left: 4px solid var(--red-border);
+      color: #7c2d12;
+    }
+
+    .feedback .ref {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Panel final de resultados */
+    .summary-card {
+      border: 2px solid var(--primary);
+      text-align: center;
+    }
+
+    .summary-card h2 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .big-score {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 6px 0;
+    }
+
+    .block-scores {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    .block-stat {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.9rem;
+    }
+
+    .block-stat strong {
+      display: block;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 8px;
+      padding: 11px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: var(--text);
+    }
+
+    @media (max-width: 640px) {
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+      .stats {
+        gap: 8px;
+        font-size: 0.82rem;
+      }
+    }
+
+    @media print {
+      .topbar, .actions {
+        display: none !important;
+      }
+      body {
+        background: #fff;
+      }
+      .card {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">NC Plagas · Control de Legionella</div>
+      <div class="stats">
+        <span class="pill" id="answeredCount">Respondidas: 0 / 30</span>
+        <span class="pill" id="scoreCount">Aciertos: 0</span>
+        <span class="pill" id="timerDisplay">⏱ 45:00</span>
+      </div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressBar"></div>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="card header-card">
+      <h1>Examen Interno de Prevención y Control de <em>Legionella</em></h1>
+      <p class="subtitle">Evaluación técnica para operarios de NC Plagas · Normativa y actuaciones en campo</p>
+
+      <div class="meta-grid">
+        <div class="field">
+          <label for="operario">Nombre y apellidos del operario</label>
+          <input type="text" id="operario" placeholder="Escribe tu nombre completo..." />
+        </div>
+        <div class="field">
+          <label for="fecha">Fecha</label>
+          <input type="date" id="fecha" />
+        </div>
+      </div>
+
+      <div class="instructions">
+        <strong>Instrucciones:</strong>
+        <ul>
+          <li>El examen consta de <strong>30 preguntas</strong> tipo test divididas en 4 bloques. Tiempo orientativo: <strong>45 minutos</strong>.</li>
+          <li>Cada acierto vale <strong>1 punto</strong>. Las respuestas incorrectas y en blanco valen <strong>0 puntos</strong> (máximo 30 puntos).</li>
+          <li>Al pulsar una opción, la <strong>respuesta correcta se marcará en verde</strong> inmediatamente junto con su justificación técnica.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div id="quizContainer"></div>
+
+    <section class="card summary-card" id="summaryCard">
+      <h2>Resumen de resultados</h2>
+      <div class="big-score" id="finalScore">0 / 30</div>
+      <p id="finalStatus" style="color: var(--muted);">Responde a las preguntas para calcular tu puntuación final.</p>
+
+      <div class="block-scores" id="blockScores"></div>
+
+      <div class="actions">
+        <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar PDF</button>
+        <button class="btn btn-secondary" onclick="resetQuiz()">Reiniciar examen</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const blocks = [
+      { id: 1, title: "Bloque 1. Agua sanitaria (AFCH y ACS)", count: 10 },
+      { id: 2, title: "Bloque 2. Riego por aspersión", count: 6 },
+      { id: 3, title: "Bloque 3. Fuentes ornamentales", count: 6 },
+      { id: 4, title: "Bloque 4. Torres de refrigeración", count: 8 }
+    ];
+
+    const questions = [
+      // BLOQUE 1 (1-10)
+      {
+        id: 1, block: 1,
+        text: "Realizas el control diario en una instalación de agua caliente sanitaria (ACS) gestionada mediante un Plan de Prevención y Control de Legionella (PPCL). La sala térmica dispone de un acumulador final convencional y, en otro módulo, de un interacumulador de doble tanque. ¿Qué temperaturas mínimas homogéneas exige la normativa en el agua almacenada en ambos equipos?",
+        options: [
+          "55 °C en el acumulador final y 60 °C en el interacumulador de doble tanque.",
+          "60 °C tanto en el acumulador final como en el interacumulador de doble tanque.",
+          "60 °C en el acumulador final y 70 °C en el interacumulador de doble tanque.",
+          "50 °C en el acumulador final y 60 °C en el interacumulador de doble tanque."
+        ],
+        correct: 2,
+        justification: "Los acumuladores finales de ACS deben asegurar una temperatura homogénea mínima de 60 °C, mientras que los interacumuladores de doble tanque exigen un mínimo de 70 °C.",
+        ref: "RD 487/2022, Anexo III, Apdo. I, Parte A, punto 7.c (modificado por RD 614/2024)"
+      },
+      {
+        id: 2, block: 1,
+        text: "Durante el control mensual rotatorio en un hotel con PPCL, revisas una ducha con válvula mezcladora situada en la planta más alejada. La temperatura medida justo antes de la válvula mezcladora es de 47 °C tras dejar correr el agua un minuto, y el tramo de tubería desde la mezcladora hasta el rociador tiene una longitud de 6 metros. ¿Qué incumplimientos normativos has detectado?",
+        options: [
+          "Antes de la válvula mezcladora deben garantizarse 50 °C (con estabilización antes del minuto) y el tramo sin circulación asegurada por encima de 50 °C no puede superar los 5 metros o los 3 litros.",
+          "Antes de la válvula mezcladora deben garantizarse 60 °C (con estabilización en dos minutos) y el tramo posterior no puede superar los 3 metros o los 5 litros.",
+          "Antes de la válvula mezcladora deben garantizarse 55 °C (con estabilización antes de tres minutos) y el tramo posterior no puede superar los 10 metros.",
+          "El único incumplimiento es la temperatura inferior a 50 °C, porque la longitud del tramo posterior a la válvula mezcladora es solo una recomendación técnica."
+        ],
+        correct: 0,
+        justification: "En válvulas mezcladoras deben garantizarse 50 °C antes de la válvula con estabilización antes de 1 minuto, y los tramos sin circulación asegurada por encima de 50 °C no pueden superar 5 m o 3 L.",
+        ref: "RD 487/2022, Anexo III, Apdo. I, Parte A, punto 7.h; Anexo IV, Parte B.2"
+      },
+      {
+        id: 3, block: 1,
+        text: "El titular de una instalación de agua sanitaria (AFCH y ACS) quiere sustituir su PPCL por un Plan Sanitario frente a Legionella (PSL) para reducir la frecuencia de todas las tareas preventivas. Según los criterios técnicos para la implantación de un PSL, ¿qué actividad de mantenimiento NO admite reducción de frecuencia por considerarse un Punto de Control Crítico (PCC)?",
+        options: [
+          "La purga semanal del fondo de los acumuladores de ACS.",
+          "La eliminación mensual de sedimentos a través de las válvulas de drenaje de las tuberías.",
+          "La comprobación semanal de la temperatura en el depósito de agua fría (AFCH).",
+          "El control diario de la temperatura en los depósitos finales de acumulación y en el circuito de retorno de ACS."
+        ],
+        correct: 3,
+        justification: "Bajo un PSL pueden espaciarse la purga del acumulador, las válvulas de drenaje o la temperatura del depósito AFCH, pero el control diario de temperatura en acumuladores finales y retorno es un PCC sin reducción posible.",
+        ref: "Manual de implantación de PSL, Apdo. 10.1.1; RD 487/2022, Anexo IV, Parte B.2"
+      },
+      {
+        id: 4, block: 1,
+        text: "En el mes de julio, al realizar la comprobación semanal del depósito de agua fría de consumo humano (AFCH) de un edificio con PPCL, el termómetro interior marca 27 °C. ¿Cuál es la actuación correcta?",
+        options: [
+          "Anotar el dato y esperar a la revisión anual, ya que en verano solo es obligatorio actuar si el agua fría alcanza los 30 °C.",
+          "Registrar la desviación y comunicarla al responsable técnico del Plan para realizar la evaluación del riesgo y adoptar las medidas oportunas teniendo en cuenta las condiciones climatológicas.",
+          "Vaciar de inmediato todo el depósito de AFCH y ejecutar una desinfección térmica a 70 °C durante dos horas antes de reabrir el suministro.",
+          "Añadir hipoclorito sódico de forma manual hasta duplicar el residual habitual y cerrar la incidencia sin avisar al responsable técnico."
+        ],
+        correct: 1,
+        justification: "En AFCH, superar los 25 °C en el depósito obliga a realizar la evaluación del riesgo y adoptar medidas oportunas teniendo en cuenta las condiciones climatológicas, comunicando la desviación al responsable técnico.",
+        ref: "RD 487/2022, Anexo IV, Parte B.3 y gestión de incidencias/desviaciones"
+      },
+      {
+        id: 5, block: 1,
+        text: "Te corresponde efectuar la revisión trimestral de mantenimiento de dos acumuladores de ACS de 1.000 litros en una residencia con PPCL. La limpieza y desinfección anual se completó hace tres meses y no existen desviaciones de temperatura ni anomalías externas. Un compañero asegura que la normativa obliga a vaciar ambos acumuladores y abrir sus bocas de registro cada trimestre. ¿Qué debes responderle?",
+        options: [
+          "Que tiene razón, porque todos los acumuladores de 750 litros o más deben vaciarse y abrirse obligatoriamente cada tres meses.",
+          "Que no es obligatorio, ya que la revisión trimestral del estado de mantenimiento de los acumuladores de ACS no implica necesariamente su apertura y vaciado.",
+          "Que la apertura trimestral solo es obligatoria cuando los acumuladores tienen bocas de registro inferiores a 400 mm de diámetro.",
+          "Que el error está en la frecuencia, porque bajo un PPCL los acumuladores de ACS únicamente se revisan una vez al año."
+        ],
+        correct: 1,
+        justification: "La redacción vigente aclara expresamente que la revisión trimestral del estado de mantenimiento de los acumuladores de ACS no implica obligatoriamente su apertura y vaciado.",
+        ref: "RD 487/2022, Anexo IV, Parte B.2 (modificado por RD 614/2024)"
+      },
+      {
+        id: 6, block: 1,
+        text: "Vas a realizar la limpieza y desinfección química anual completa de un sistema de agua sanitaria con depósito, acumulador de ACS, red y puntos terminales bajo PPCL. El edificio está ocupado y el acumulador se encuentra a 62 °C. ¿Qué acciones previas y orden de limpieza exige el procedimiento normativo?",
+        options: [
+          "Empezar limpiando la red y los puntos terminales, seguir por el acumulador y terminar por el depósito, manteniendo el ACS a 60 °C para reforzar el efecto del biocida.",
+          "Avisar a los usuarios de la prohibición de uso y vaciar de golpe el acumulador introduciendo agua fría de red para bajar la temperatura lo más rápido posible.",
+          "Mantener conectados los dosificadores automáticos de tratamiento durante toda la limpieza para no desprogramar las sondas de control.",
+          "Informar de forma evidente sobre la prohibición de uso del agua, desconectar el calentamiento con antelación para iniciar el tratamiento a temperatura ambiente y siempre inferior a 30 °C evitando enfriamientos bruscos, desconectar los sistemas de tratamiento y limpiar en orden: depósito, acumulador, red y puntos terminales."
+        ],
+        correct: 3,
+        justification: "El procedimiento exige avisar de la prohibición de uso, enfriar gradualmente por debajo de 30 °C sin choques térmicos, desconectar equipos de tratamiento y limpiar en orden: depósito, acumulador, red y puntos terminales.",
+        ref: "RD 487/2022, Anexo IV, Parte B.4 (introducción, punto 1 y punto 4.a)"
+      },
+      {
+        id: 7, block: 1,
+        text: "En un centro deportivo se programa una desinfección térmica preventiva del sistema de ACS (no asociada a un caso o brote) tras limpiar el acumulador. ¿Qué temperaturas y tiempos fija el procedimiento normativo?",
+        options: [
+          "Elevar el acumulador a 70 °C al menos durante 2 horas, abrir por completo los puntos terminales de forma secuencial por sectores hasta alcanzar 60 °C durante al menos 5 minutos y dejar enfriar la red de forma natural un mínimo de 2 horas.",
+          "Elevar el acumulador a 65 °C durante 1 hora, abrir todos los grifos del edificio a la vez hasta alcanzar 55 °C durante 2 minutos y enfriar la red inyectando agua fría.",
+          "Elevar el acumulador a 70 °C durante 30 minutos, abrir los puntos más alejados hasta alcanzar 50 °C durante 10 minutos y restablecer el uso de inmediato.",
+          "Aplicar 60 °C en el acumulador durante 2 horas y 55 °C en los puntos terminales durante 5 minutos, siendo además el método recomendado para tratamientos de choque en red."
+        ],
+        correct: 0,
+        justification: "La desinfección térmica preventiva fija 70 °C al menos 2 horas en el acumulador, apertura secuencial por sectores hasta 60 °C durante al menos 5 minutos en terminales y enfriamiento natural mínimo de 2 horas.",
+        ref: "RD 487/2022, Anexo IV, Parte B.5; Anexo IX, Parte A"
+      },
+      {
+        id: 8, block: 1,
+        text: "Durante la desinfección química de la red de AFCH y ACS de un polideportivo con un biocida cuya ficha técnica indica que su eficacia depende del pH, observas que los rociadores desmontables presentan incrustaciones y hay dos duchas fijas que no se pueden desmontar ni sumergir. ¿Cómo debes proceder?",
+        options: [
+          "Sumergir los rociadores desmontables directamente en el biocida sin retirar incrustaciones, pulverizar las duchas fijas sin aclarado posterior y medir el biocida solo al inicio y al final.",
+          "Desmontar y sustituir obligatoriamente las dos duchas fijas antes del tratamiento y comprobar el pH únicamente en el depósito de entrada al comenzar.",
+          "Limpiar a fondo los elementos desmontables antes de sumergirlos en biocida y aclararlos con abundante agua fría; cubrir los difíciles de desmontar con un paño limpio impregnado en desinfectante (o pulverizar como alternativa excepcional) con aclarado posterior; y controlar el biocida y el pH al menos cada hora en el depósito y en los puntos más alejados.",
+          "Limpiar únicamente las incrustaciones con desincrustante y volver a montar los rociadores sin sumergirlos, confiando en que el paso del agua tratada por la red elimine la biocapa."
+        ],
+        correct: 2,
+        justification: "Hay que limpiar a fondo antes de sumergir y aclarar con agua fría; los elementos no desmontables se cubren con paño impregnado (o pulverización excepcional) con aclarado; el biocida y pH se controlan al menos cada hora.",
+        ref: "RD 487/2022, Anexo IV, Parte B.4, puntos 4.e y 4.h"
+      },
+      {
+        id: 9, block: 1,
+        text: "Tienes que tomar una muestra de agua del acumulador de ACS (cuyo llenado de agua fría entra por la parte inferior). Al purgar sin haber cerrado la entrada de agua fría, el termómetro marca 19 °C, un valor muy cercano al del agua de red. ¿Cómo debes actuar para recoger una muestra representativa del acumulador?",
+        options: [
+          "Cerrar la llave de entrada de agua fría para recoger agua del acumulador y, si aun así no es representativa en la purga, tomarla en la impulsión (si hay toma-muestra) o en el punto terminal más próximo dejando correr el agua hasta alcanzar la temperatura máxima.",
+          "Recoger directamente ese primer litro a 19 °C, ya que la normativa exige tomar siempre el primer vertido frío que sale por la manguera de desagüe.",
+          "Tomar un raspado con torunda en la llave de purga e introducir esa torunda en el mismo envase destinado al análisis cuantitativo de Legionella spp.",
+          "Anular la muestra del acumulador y sustituirla por una muestra recogida en la entrada general de agua fría del edificio."
+        ],
+        correct: 0,
+        justification: "Si el aporte de agua fría entra por la parte inferior se cierra su llave; si la purga sigue sin ser representativa, se muestrea en impulsión o en el terminal más próximo dejando correr el agua hasta temperatura máxima.",
+        ref: "RD 487/2022, Anexo VI (acumuladores de ACS); Guía de toma de muestras, Apdo. 4.2"
+      },
+      {
+        id: 10, block: 1,
+        text: "Tras completar una limpieza y desinfección química de una instalación de agua sanitaria (AFCH y ACS), debes cumplimentar los datos del certificado de tratamiento. Según la normativa vigente, ¿qué debe constar respecto a los productos y las mediciones?",
+        options: [
+          "Únicamente el nombre comercial del biocida y la fecha de ejecución, sin necesidad de adjuntar mediciones de la red.",
+          "Solo el número de registro del biocida y una única lectura de temperatura del acumulador al finalizar el llenado.",
+          "El nombre comercial y el número de registro de los biocidas utilizados, adjuntando un anexo con los niveles de temperatura y desinfectante en los puntos terminales representativos más alejados de la red y las temperaturas de los acumuladores durante todo el proceso, indicando la hora de cada determinación.",
+          "El nombre comercial del biocida y una copia de la factura de compra del producto, pudiendo omitir la hora de las determinaciones si todos los valores fueron conformes."
+        ],
+        correct: 2,
+        justification: "El certificado debe reflejar el nombre comercial y n.º de registro de los biocidas, más un anexo con niveles de temperatura y desinfectante en los puntos terminales más alejados y temperaturas de acumuladores con la hora de cada medición.",
+        ref: "RD 614/2024, apdo. Veintitrés (modificación del Anexo X del RD 487/2022)"
+      },
+
+      // BLOQUE 2 (11-16)
+      {
+        id: 11, block: 2,
+        text: "Te consultan por dos sistemas de riego por aspersión: el primero riega un parque público urbano y el segundo riega el jardín privado de un edificio de uso exclusivo de viviendas, pero sus aspersores perimetrales proyectan aerosoles hacia la acera exterior transitada por peatones. Según el ámbito de aplicación de la normativa vigente, ¿qué consideración tienen?",
+        options: [
+          "Ninguno entra en la normativa, ya que los sistemas de riego por aspersión solo se regulan cuando pertenecen a campos de golf.",
+          "Ambos quedan excluidos siempre que utilicen agua potable procedente de la red de distribución municipal.",
+          "El parque urbano solo entra en el ámbito normativo si dispone de depósito de acumulación y bomba de recirculación continua.",
+          "El parque urbano está incluido expresamente, y la exclusión de edificios dedicados al uso exclusivo de vivienda solo aplica cuando la instalación no afecta al ambiente exterior; además, ante sospecha de riesgo, la autoridad sanitaria puede exigir medidas de control."
+        ],
+        correct: 3,
+        justification: "El riego urbano está incluido expresamente, y las viviendas exclusivas solo quedan excluidas si no afectan al ambiente exterior; ante sospecha de riesgo, la autoridad sanitaria puede exigir medidas.",
+        ref: "RD 487/2022, art. 3 (apdos. 1 y 2) y Anexo I (apdo. 9)"
+      },
+      {
+        id: 12, block: 2,
+        text: "Revisas el PPCL de un campo de deportes con riego por aspersión (instalación sin recirculación) que utiliza agua regenerada como agua de aporte. ¿Qué requisitos son aplicables respecto al origen del agua y a la frecuencia de análisis de Legionella spp.?",
+        options: [
+          "El uso de agua regenerada está prohibido en cualquier sistema de riego por aspersión, por lo que debe desconectarse de inmediato la instalación.",
+          "Al proceder de un origen distinto a la red de consumo debe disponerse del tratamiento necesario para evitar Legionella spp., adecuar su calidad a los requisitos de los fabricantes y realizar el análisis de Legionella con periodicidad mensual conforme a la normativa de reutilización de aguas.",
+          "Al tratarse de una instalación sin recirculación, basta con el análisis anual de Legionella spp. y no requiere tratamiento adicional del agua de aporte.",
+          "Solo es necesario analizar aerobios y turbidez una vez al mes, quedando exento del análisis de Legionella spp. por tratarse de un espacio al aire libre."
+        ],
+        correct: 1,
+        justification: "El agua ajena a red de consumo exige tratamiento frente a Legionella y adecuación a fabricantes; al ser agua regenerada, el análisis de Legionella spp. es mensual conforme al RD 1620/2007.",
+        ref: "RD 487/2022, Anexo III y Anexo V (Tabla 3); Guía práctica PSL, Apdo. 10.2"
+      },
+      {
+        id: 13, block: 2,
+        text: "En un sistema de riego por aspersión municipal con PPCL (instalación sin recirculación que pulveriza agua mediante boquillas), ¿qué pauta mínima de revisión establece la normativa?",
+        options: [
+          "Revisión trimestral de las boquillas y revisión general cada dos años si la temperatura del agua no supera los 20 °C.",
+          "Revisión diaria de todos los aspersores y sustitución obligatoria de las boquillas cada seis meses aunque estén en buen estado.",
+          "Revisión mensual de las boquillas (limpiándolas si la revisión lo aconseja) y revisión general anual de toda la instalación, procediendo a limpiar y, en su caso, desinfectar cuando se detecte suciedad, incrustaciones o sedimentos.",
+          "Revisión anual exclusiva de las bombas de impulsión, ya que las boquillas y conducciones exteriores no requieren revisión programada."
+        ],
+        correct: 2,
+        justification: "Las instalaciones sin recirculación con boquillas requieren revisión mensual de boquillas (con limpieza si procede) y revisión general anual con limpieza/desinfección ante suciedad, incrustaciones o sedimentos.",
+        ref: "RD 487/2022, Anexo IV, Parte E.1 (punto 2) y Parte E.4"
+      },
+      {
+        id: 14, block: 2,
+        text: "Un campo de golf ha tenido parado su sistema de riego por aspersión durante tres meses en invierno y pretende reabrirlo en primavera. El encargado propone poner en marcha los aspersores durante 10 minutos para «renovar el agua» y dar la instalación por apta. ¿Qué debes indicarle según la normativa?",
+        options: [
+          "Que tras una parada superior a un mes es obligatorio realizar limpieza y desinfección antes de la puesta en servicio, y efectuar además una determinación de Legionella spp. entre 15 y 30 días después del tratamiento.",
+          "Que su propuesta es suficiente si el depósito ha permanecido cerrado y la temperatura ambiente durante el invierno ha sido inferior a 20 °C.",
+          "Que solo es obligatorio medir el pH y purgar los dos aspersores más alejados antes de regar, posponiendo la limpieza hasta la fecha anual prevista.",
+          "Que basta con inyectar biocida mientras funcionan los aspersores en horario diurno para desinfectar la red sin detener la actividad del campo."
+        ],
+        correct: 0,
+        justification: "Tras una parada superior a un mes es obligatorio realizar limpieza y desinfección antes de la puesta en servicio y analizar Legionella spp. entre 15 y 30 días después del tratamiento.",
+        ref: "RD 487/2022, Anexo IV, Parte E.1 (punto 3) y Anexo V, Parte C"
+      },
+      {
+        id: 15, block: 2,
+        text: "Vas a ejecutar la limpieza y desinfección programada del depósito y red de un riego por aspersión municipal (sin recirculación) con un biocida cuya ficha técnica indica que su eficacia depende del pH. ¿Qué procedimiento cumple correctamente la normativa?",
+        options: [
+          "Dosificar el biocida directamente sobre el agua almacenada sin retirar sedimentos, dejar actuar sin controlar el pH y evacuar el agua clorada regando las zonas verdes sin neutralizar.",
+          "Tomar medidas para no afectar a los usuarios de la zona, limpiar a fondo las paredes del depósito eliminando incrustaciones y aclarando con agua limpia, desinfectar el tiempo establecido controlando el pH, neutralizar el biocida y vaciar, limpiar y sumergir las piezas desmontables con aclarado en abundante agua fría, y volver a llenar para restablecer el uso normal.",
+          "Pulverizar los aspersores desde el exterior sin desmontar las boquillas ni limpiar el depósito, ya que el tratamiento externo elimina los depósitos del circuito.",
+          "Mantener el sistema en recirculación continua con biodispersante y anticorrosivo durante 10 horas antes de vaciar, aunque la instalación no tenga circuito de recirculación."
+        ],
+        correct: 1,
+        justification: "En instalaciones sin recirculación debe evitarse afectar a usuarios, limpiar a fondo el depósito y aclarar, desinfectar controlando el pH, neutralizar y vaciar, limpiar/sumergir piezas desmontables con aclarado frío y volver a llenar.",
+        ref: "RD 487/2022, Anexo IV, Parte E.1 (puntos 4 y 5) y Parte E.4"
+      },
+      {
+        id: 16, block: 2,
+        text: "Durante la revisión de un riego por aspersión urbano detectas tres boquillas deterioradas que generan niebla excesiva y una electroválvula defectuosa. Dos días después el personal de mantenimiento sustituye los elementos y aprovecha para anular un ramal ciego modificando el trazado de la red. ¿Qué debe quedar registrado en la documentación del PPCL?",
+        options: [
+          "Únicamente la factura de los recambios adquiridos, sin necesidad de anotar fechas de detección ni modificar los planos.",
+          "Solo el nombre del fabricante de las boquillas instaladas, dejando la actualización del plano para la siguiente revisión quinquenal.",
+          "Una anotación general al final del año resumiendo las reparaciones, sin identificar al personal que intervino en el cambio.",
+          "La fecha en que se detectaron los componentes deteriorados, la fecha de su reparación o sustitución, la identificación del personal o empresa que realizó la actividad y la actualización del plano o esquema del circuito hidráulico indicando la fecha de la modificación."
+        ],
+        correct: 3,
+        justification: "Deben registrarse las fechas de detección y reparación/sustitución, quién realizó la actividad y actualizar el plano o esquema hidráulico indicando la fecha de la modificación.",
+        ref: "RD 487/2022, art. 8, apdo. 2.a.2.º y Anexo IV (introducción)"
+      },
+
+      // BLOQUE 3 (17-22)
+      {
+        id: 17, block: 3,
+        text: "Un ayuntamiento dispone de una fuente ornamental con surtidores que generan difusión de aerosoles en una plaza y de una fuente transitable con chorros a ras de suelo. Según la normativa vigente, ¿qué criterio general se les aplica?",
+        options: [
+          "Solo la fuente transitable está incluida en el ámbito normativo, mientras que las fuentes ornamentales con chorros quedan excluidas por no suministrar agua de consumo.",
+          "Ninguna está sujeta a la normativa salvo que el agua del vaso esté climatizada a una temperatura igual o superior a 24 °C.",
+          "Ambas están incluidas en el ámbito de aplicación, su diseño debe minimizar la emisión de aerosoles y evitar zonas de estancamiento, y el agua debe mantenerse preferiblemente por debajo de 20 °C.",
+          "Ambas se asimilan a circuitos de agua caliente sanitaria y deben mantener una temperatura mínima de 50 °C en los surtidores."
+        ],
+        correct: 2,
+        justification: "Tanto las fuentes ornamentales con difusión de aerosoles como las fuentes transitables entran en el ámbito normativo; deben minimizar aerosoles y estancamientos y mantener el agua preferiblemente < 20 °C.",
+        ref: "RD 487/2022, Anexo I (apdo. 8) y Anexo III (Tabla 1)"
+      },
+      {
+        id: 18, block: 3,
+        text: "En el PPCL de un centro comercial gestionas una fuente ornamental con depósito y recirculación continua de agua. ¿Qué frecuencias mínimas de muestreo y control establece la normativa para este tipo de instalación?",
+        options: [
+          "Legionella spp. mensual, aerobios mensuales, turbidez diaria y conductividad mensual.",
+          "Legionella spp. anual, aerobios semestrales, y pH, temperatura, turbidez y biocida con periodicidad mensual.",
+          "Legionella spp. anual y únicamente pH, temperatura y biocida mensuales, sin exigir control de aerobios ni de turbidez.",
+          "Legionella spp. trimestral, hierro total trimestral y temperatura semanal, sin necesidad de controlar el biocida."
+        ],
+        correct: 1,
+        justification: "En «Otras instalaciones que puedan producir aerosolización con depósito y recirculación» bajo PPCL, las frecuencias mínimas son: Legionella anual, aerobios semestrales y pH, temperatura, turbidez y biocida mensuales.",
+        ref: "RD 487/2022, Anexo V, Tabla 3"
+      },
+      {
+        id: 19, block: 3,
+        text: "Al revisar una fuente ornamental con depósito y recirculación observas algas en el vaso, incrustaciones calcáreas y adherencias en las paredes. Debes realizar la limpieza y desinfección del circuito con un biocida cuya ficha técnica indica que depende del pH. ¿Qué procedimiento se ajusta a la normativa?",
+        options: [
+          "Limpiar a fondo las superficies eliminando incrustaciones y adherencias, reparar lo necesario y aclarar; desinfectar con biocida añadiendo biodispersantes y anticorrosivos compatibles controlando el pH; recircular el tiempo establecido comprobando el biocida al menos cada hora y reponiendo la pérdida; neutralizar, vaciar y aclarar con agua a presión; y finalmente llenar y restablecer las condiciones normales.",
+          "Añadir el biocida directamente sobre las algas sin limpiar antes el vaso, recircular 15 minutos sin medir el desinfectante y mantener encendidos los chorros con público alrededor.",
+          "Vaciar el vaso, aplicar únicamente agua a presión para retirar las algas y volver a llenar, ya que la limpieza mecánica hace innecesaria la desinfección química.",
+          "Aplicar una desinfección térmica calentando el agua del vaso a 70 °C durante dos horas y reabrir la fuente sin neutralizar ni aclarar."
+        ],
+        correct: 0,
+        justification: "La L+D con depósito y recirculación exige limpieza previa exhaustiva, desinfección con biodispersantes/anticorrosivos compatibles y control de pH, recirculación con control horario de biocida, neutralización, vaciado, aclarado a presión y llenado.",
+        ref: "RD 487/2022, Anexo IV (introducción y Parte E.3)"
+      },
+      {
+        id: 20, block: 3,
+        text: "En una visita de control a una fuente ornamental con recirculación te indican recoger una muestra de agua para cuantificación de Legionella spp. (sin torunda) y, aparte, realizar un raspado con torunda en las paredes del vaso y los extremos accesibles de las boquillas. ¿Qué práctica está expresamente prohibida por el procedimiento normativo de toma de muestras?",
+        options: [
+          "Raspar con la torunda las superficies en contacto con el agua o los extremos accesibles de las boquillas.",
+          "Utilizar un recipiente independiente y específico para la muestra tomada con torunda.",
+          "Registrar la temperatura y los parámetros in situ previstos en el programa de muestreo.",
+          "Introducir la torunda dentro del envase destinado al ensayo cuantitativo de Legionella spp. (sin torunda) o a ensayos físico-químicos, porque altera la cuantificación e interfiere en los resultados."
+        ],
+        correct: 3,
+        justification: "Está expresamente prohibido introducir la torunda en los envases destinados a ensayos físico-químicos o microbiológicos sin torunda porque altera la cuantificación de Legionella spp.",
+        ref: "RD 487/2022, Anexo VI (toma de muestras con torundas)"
+      },
+      {
+        id: 21, block: 3,
+        text: "Una fuente ornamental con recirculación de un hotel ha permanecido parada tres días por una avería en la bomba (superando las 24 horas sin recirculación con biocida y la vida media del biocida empleado). Una vez reparada la bomba, el cliente quiere ponerla en marcha de inmediato. ¿Cuál debe ser tu primera actuación antes de reabrir la fuente?",
+        options: [
+          "Poner en funcionamiento los chorros durante 10 minutos y esperar al siguiente muestreo mensual para verificar el estado del agua.",
+          "Comprobar el nivel de biocida y, si fuera necesario, la calidad microbiológica (Legionella spp. y aerobios totales) antes de su puesta en funcionamiento, realizando una limpieza y desinfección cuando sea necesario para evitar o reducir al mínimo la proliferación y diseminación de Legionella.",
+          "Rellenar únicamente el volumen de agua evaporado sin comprobar el desinfectante, ya que la parada no ha alcanzado el mes completo.",
+          "Duplicar la dosificación de biocida con los chorros en marcha y la fuente abierta al paso de clientes para acelerar la recuperación."
+        ],
+        correct: 1,
+        justification: "Cuando la parada supera la vida media del biocida o hay más de 24 h sin recirculación con biocida, debe comprobarse el nivel de biocida y, si es necesario, la calidad microbiológica antes de reabrir, efectuando L+D si procede.",
+        ref: "RD 487/2022, Anexo V, Parte C (modificado por RD 614/2024)"
+      },
+      {
+        id: 22, block: 3,
+        text: "Durante la revisión mensual de una fuente ornamental con recirculación compruebas que el nivel de biocida es de 0 mg/L y descubres que el personal de mantenimiento del recinto ha conectado al dosificador una garrafa de un producto distinto al del PPCL, del que no consta registro biocida ni ficha de datos de seguridad. ¿Cómo debes actuar?",
+        options: [
+          "Mantener ese producto conectado mientras huela a cloro y subir el caudal de la bomba dosificadora hasta que marque residual.",
+          "Sustituir la garrafa por otro biocida que lleves en el vehículo sin avisar al responsable técnico ni dejar constancia escrita.",
+          "Registrar la incidencia y comunicarla de inmediato al responsable técnico del Plan para que valore las medidas correspondientes, recordando que solo pueden emplearse biocidas autorizados y registrados conforme a su autorización y aprobados previamente por el responsable técnico tras verificar registro, ficha técnica y ficha de datos de seguridad.",
+          "Dejar la fuente en funcionamiento sin desinfectante hasta el mes siguiente, porque en una fuente ornamental no existe contacto por ingestión."
+        ],
+        correct: 2,
+        justification: "Toda desviación de desinfectante e incidencia debe registrarse y comunicarse al responsable técnico; solo pueden usarse biocidas autorizados/registrados y validados previamente (registro, ficha técnica y FDS).",
+        ref: "RD 487/2022, art. 16; Guía práctica PSL (Programas de tratamiento y proveedores)"
+      },
+
+      // BLOQUE 4 (23-30)
+      {
+        id: 23, block: 4,
+        text: "Respecto a la función y exigencias del separador de gotas en una torre de refrigeración, ¿qué afirmación es correcta según la normativa y los criterios para implantar un PSL?",
+        options: [
+          "Debe ser de alta eficiencia, con un caudal de agua arrastrado menor del 0,002 % del caudal de agua circulante, y su revisión semestral no admite reducción de frecuencia en un PSL por considerarse un Punto de Control Crítico (PCC).",
+          "Su caudal de agua arrastrado debe ser menor del 0,02 % del caudal circulante y su revisión puede pasar a anual si la empresa implanta un PSL.",
+          "Su función es impedir totalmente la evaporación de agua y solo requiere revisión cuando se detecta turbidez elevada en la balsa.",
+          "Su caudal arrastrado debe ser inferior al 0,2 % del caudal circulante y únicamente es obligatorio en condensadores evaporativos, no en torres de refrigeración."
+        ],
+        correct: 0,
+        justification: "El separador de gotas debe ser de alta eficiencia con arrastre < 0,002 % del caudal circulante y su revisión semestral es un PCC que no admite reducción de frecuencia en un PSL.",
+        ref: "RD 487/2022, Anexo III (Parte B, punto 6) y Anexo IV (Parte C.1); Manual PSL, Apdo. 10.1.3"
+      },
+      {
+        id: 24, block: 4,
+        text: "En una torre de refrigeración de funcionamiento no estacional gestionada con PPCL, ¿qué periodicidad mínima de revisión establece la normativa para los elementos básicos del circuito?",
+        options: [
+          "Mensualmente el separador de gotas y el relleno; semestralmente la bandeja y los sistemas de dosificación.",
+          "Trimestralmente la bandeja y los equipos de dosificación; anualmente el separador de gotas, el relleno y el sistema de distribución de agua.",
+          "Semestralmente todos los componentes del circuito sin distinción, incluyendo los equipos de tratamiento y purga.",
+          "Mensualmente la bandeja, los sistemas de purga (sondas de conductividad, electroválvulas), los equipos de tratamiento y los de dosificación; semestralmente el separador de gotas, el condensador, el relleno (si procede) y el sistema de distribución de agua."
+        ],
+        correct: 3,
+        justification: "Bajo PPCL se revisan mensualmente bandeja, sistemas de purga, tratamiento y dosificación; y semestralmente separador de gotas, condensador, relleno (si procede) y sistema de distribución de agua.",
+        ref: "RD 487/2022, Anexo IV, Parte C.1 (punto 2)"
+      },
+      {
+        id: 25, block: 4,
+        text: "Te asignan la toma de muestras mensual de una torre de refrigeración con sistema automático de dosificación de biocida. ¿Dónde debes recoger las muestras de agua del circuito según el procedimiento normativo?",
+        options: [
+          "Justo en el punto de inyección del biocida para verificar que el dosificador aporta concentración suficiente.",
+          "En la tubería del circuito de retorno y en el depósito o balsa de agua, en el punto más alejado tanto del aporte de agua como de la inyección de biocida.",
+          "En la acometida general de agua fría antes de la válvula de llenado de la balsa.",
+          "Exclusivamente en la bandeja superior mediante una torunda introducida en el envase de agua para análisis microbiológico."
+        ],
+        correct: 1,
+        justification: "Las muestras en torres se toman en la tubería del circuito de retorno y/o en la balsa o depósito en el punto más alejado tanto del aporte de agua como de la inyección de biocida.",
+        ref: "RD 487/2022, Anexo V, Parte B.2"
+      },
+      {
+        id: 26, block: 4,
+        text: "Estás ejecutando la limpieza y desinfección semestral de una torre de refrigeración que ha podido parar su actividad. Ya has desconectado los sistemas de tratamiento del agua y vas a iniciar la fase de recirculación con el biocida (cuya ficha técnica señala dependencia del pH). ¿Qué medida de seguridad y control es imprescindible durante esta fase?",
+        options: [
+          "Mantener los ventiladores en marcha a baja velocidad para disipar los vapores del biocida y evitar su acumulación en el relleno.",
+          "Mantener conectados los dosificadores automáticos habituales durante la recirculación para que compensen las variaciones de pH.",
+          "Mantener los ventiladores desconectados para evitar la salida de biocida al ambiente y medir el nivel de biocida y el pH al menos cada hora, ajustándolos si es necesario.",
+          "Medir el biocida únicamente al inicio y al final del tiempo de contacto, ya que con el sistema cerrado la concentración no disminuye."
+        ],
+        correct: 2,
+        justification: "Durante la recirculación con biocida en parada deben mantenerse los ventiladores desconectados para evitar emitir biocida al exterior, midiendo biocida y pH (si depende) al menos cada hora.",
+        ref: "RD 487/2022, Anexo IV, Parte C.2, apdo. I (puntos 1 y 2.c)"
+      },
+      {
+        id: 27, block: 4,
+        text: "Una fábrica solicita realizar la limpieza y desinfección de su torre de refrigeración en continuo, sin detener la producción. Según la normativa, ¿qué condición debe cumplirse y cómo se gestiona el agua al concluir la desinfección en continuo?",
+        options: [
+          "El titular debe acreditar que la instalación no puede parar su actividad; tras recircular con determinaciones horarias de biocida (y pH si procede), al finalizar se puede renovar la totalidad del agua a criterio del responsable técnico de mantenimiento abriendo la purga al máximo y manteniendo el nivel de la balsa para recuperar la turbidez previa, poniendo después en marcha los sistemas de tratamiento.",
+          "Cualquier industria puede elegir la desinfección en continuo sin acreditación previa, quedando prohibido abrir la purga al finalizar el tratamiento.",
+          "La normativa prohíbe sin excepciones la limpieza y desinfección en continuo en cualquier torre de refrigeración.",
+          "Basta con comprobar el biocida al principio y al final del turno y vaciar de golpe toda la balsa cerrando el aporte de agua mientras la torre sigue enfriando."
+        ],
+        correct: 0,
+        justification: "Solo procede si el titular acredita que no puede parar la actividad; al concluir, se puede renovar el agua a criterio del responsable técnico abriendo la purga al máximo y manteniendo el nivel para recuperar la turbidez previa.",
+        ref: "RD 487/2022, Anexo IV, Parte C.2, apdo. II"
+      },
+      {
+        id: 28, block: 4,
+        text: "Recibes los resultados analíticos del control periódico de una torre de refrigeración con PPCL: aerobios totales = 180.000 UFC/ml, turbidez = 22 UNF y hierro total = 2,8 mg/L. ¿Qué valoración y actuación corresponden?",
+        options: [
+          "Los tres valores cumplen los criterios normativos para torres, porque el límite de turbidez es 50 UNF y el de hierro es 5 mg/L.",
+          "Los tres parámetros incumplen los criterios de calidad del agua fijados para torres (aerobios ≤ 100.000 UFC/ml, turbidez < 15 UNF y hierro total < 2 mg/L); se debe comunicar al responsable técnico del Plan para valorar medidas, revisar el programa de tratamiento del agua y adoptar las medidas necesarias.",
+          "Solo el hierro total está fuera de rango, mientras que los aerobios y la turbidez son aceptables en circuitos de refrigeración.",
+          "No es necesario revisar el programa de tratamiento mientras el recuento de Legionella spp. sea negativo, ya que estos parámetros son meramente orientativos."
+        ],
+        correct: 1,
+        justification: "En torres, los criterios de referencia son aerobios ≤ 100.000 UFC/ml, turbidez < 15 UNF y hierro total < 2 mg/L; ante incumplimientos debe comunicarse al responsable técnico para revisar el tratamiento y actuar.",
+        ref: "RD 487/2022, Anexo III (Tabla 1) y Anexo IV (introducción)"
+      },
+      {
+        id: 29, block: 4,
+        text: "El informe del laboratorio correspondiente al muestreo mensual de una torre de refrigeración indica que el resultado de Legionella spp. es indeterminable. El cliente propone dar por cubierto el muestreo del mes y esperar al control del mes siguiente. ¿Cuál es la actuación obligatoria?",
+        options: [
+          "Considerar el resultado equivalente a ausencia de Legionella spp. y continuar con el programa habitual hasta el mes siguiente.",
+          "Repetir únicamente el control in situ de pH y conductividad sin enviar una nueva muestra de Legionella spp. al laboratorio.",
+          "Parar definitivamente la torre durante un mes sin revisar el circuito ni investigar el motivo del resultado.",
+          "Revisar el circuito de agua para identificar los motivos y el programa de mantenimiento y revisión, realizar si es necesario una limpieza y desinfección (incluyendo vaciado de depósitos si existen) y proceder a un nuevo muestreo y determinación de Legionella spp. hasta obtener resultados determinables."
+        ],
+        correct: 3,
+        justification: "Ante un resultado indeterminable de Legionella spp. debe revisarse el circuito y el programa de mantenimiento, efectuar L+D si es necesario (vaciando depósitos si existen) y repetir el muestreo hasta obtener resultados determinables.",
+        ref: "RD 487/2022, Anexo VIII (Nota sobre resultados indeterminables)"
+      },
+      {
+        id: 30, block: 4,
+        text: "Ante un caso asociado, la autoridad sanitaria ordena realizar una limpieza y desinfección de choque en una torre de refrigeración. En la fase adicional consistente en llenar de agua y volver a desinfectar con biocida y anticorrosivos compatibles, ¿con qué frecuencia debes comprobar el nivel de biocida y cómo debes finalizar y documentar la actuación?",
+        options: [
+          "Comprobar el nivel de biocida cada dos horas, vaciar sin neutralizar el desinfectante y anotar únicamente la hora de inicio y cierre del servicio.",
+          "Comprobar el nivel de biocida una sola vez tras la dosificación, no renovar el agua en ningún caso y anotar el dato solo en el parte interno del operario.",
+          "Comprobar el nivel de biocida cada 30 minutos reponiendo la cantidad perdida mientras se recircula, neutralizar el biocida y, cuando sea necesario, vaciar y aclarar con agua a presión antes de reanudar el mantenimiento, registrando los resultados de cada una de las mediciones efectuadas para integrarlos en los registros del PPCL o PSL.",
+          "Comprobar el nivel de biocida cada hora, vaciar obligatoriamente todo el circuito aunque no exista riesgo de proliferación y omitir el registro de mediciones si la torre dispone de PSL."
+        ],
+        correct: 2,
+        justification: "En el tratamiento de choque de torres debe comprobarse el biocida cada 30 minutos reponiendo pérdidas, neutralizar y vaciar/aclarar a presión cuando proceda, registrando todas las mediciones en el PPCL o PSL.",
+        ref: "RD 487/2022, Anexo IX, Parte B (modificado por RD 614/2024)"
+      }
+    ];
+
+    const letters = ["A", "B", "C", "D"];
+    let userAnswers = {};
+    let secondsLeft = 45 * 60;
+    let timerInterval = null;
+
+    function initDate() {
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("fecha").value = today;
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      secondsLeft = 45 * 60;
+      updateTimerText();
+      timerInterval = setInterval(() => {
+        if (secondsLeft > 0) {
+          secondsLeft--;
+          updateTimerText();
+        } else {
+          clearInterval(timerInterval);
+          document.getElementById("timerDisplay").textContent = "⏱ Tiempo agotado";
+        }
+      }, 1000);
+    }
+
+    function updateTimerText() {
+      const m = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
+      const s = String(secondsLeft % 60).padStart(2, "0");
+      document.getElementById("timerDisplay").textContent = `⏱ ${m}:${s}`;
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById("quizContainer");
+      container.innerHTML = "";
+
+      blocks.forEach((b) => {
+        const blockHeader = document.createElement("div");
+        blockHeader.className = "block-title";
+        blockHeader.innerHTML = `${b.title} <span>${b.count} preguntas</span>`;
+        container.appendChild(blockHeader);
+
+        const blockQuestions = questions.filter((q) => q.block === b.id);
+        blockQuestions.forEach((q) => {
+          const card = document.createElement("article");
+          card.className = "card question-card";
+          card.id = `q-${q.id}`;
+
+          const optsHtml = q.options
+            .map(
+              (opt, idx) => `
+              <button class="option-btn" data-qid="${q.id}" data-idx="${idx}" onclick="selectOption(${q.id}, ${idx})">
+                <span class="opt-letter">${letters[idx]}</span>
+                <span>${opt}</span>
+              </button>`
+            )
+            .join("");
+
+          card.innerHTML = `
+            <div class="q-header">
+              <div class="q-num">${q.id}</div>
+              <div class="q-text">${q.text}</div>
+            </div>
+            <div class="options">${optsHtml}</div>
+            <div class="feedback" id="fb-${q.id}"></div>
+          `;
+          container.appendChild(card);
+        });
+      });
+
+      updateSummary();
+    }
+
+    function selectOption(qId, selectedIdx) {
+      if (userAnswers[qId] !== undefined) return; // Bloquea cambio tras responder
+
+      const q = questions.find((item) => item.id === qId);
+      userAnswers[qId] = selectedIdx;
+
+      const card = document.getElementById(`q-${qId}`);
+      const buttons = card.querySelectorAll(".option-btn");
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.correct) {
+          btn.classList.add("correct");
+        } else if (idx === selectedIdx && selectedIdx !== q.correct) {
+          btn.classList.add("wrong");
+        } else {
+          btn.classList.add("dimmed");
+        }
+      });
+
+      const fb = document.getElementById(`fb-${qId}`);
+      const isCorrect = selectedIdx === q.correct;
+      fb.className = `feedback show ${isCorrect ? "ok" : "ko"}`;
+      fb.innerHTML = `
+        <strong>${isCorrect ? "✓ Respuesta correcta." : `✗ Incorrecto. La respuesta correcta es la ${letters[q.correct]}.`}</strong>
+        ${q.justification}
+        <span class="ref">Referencia: ${q.ref}</span>
+      `;
+
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const answeredKeys = Object.keys(userAnswers);
+      const answeredTotal = answeredKeys.length;
+      let score = 0;
+
+      const blockHits = { 1: 0, 2: 0, 3: 0, 4: 0 };
+
+      questions.forEach((q) => {
+        if (userAnswers[q.id] === q.correct) {
+          score++;
+          blockHits[q.block]++;
+        }
+      });
+
+      document.getElementById("answeredCount").textContent = `Respondidas: ${answeredTotal} / ${questions.length}`;
+      document.getElementById("scoreCount").textContent = `Aciertos: ${score}`;
+      document.getElementById("progressBar").style.width = `${(answeredTotal / questions.length) * 100}%`;
+
+      document.getElementById("finalScore").textContent = `${score} / ${questions.length}`;
+      const pct = Math.round((score / questions.length) * 100);
+
+      if (answeredTotal === 0) {
+        document.getElementById("finalStatus").textContent = "Responde a las preguntas para calcular tu puntuación final.";
+      } else if (answeredTotal < questions.length) {
+        document.getElementById("finalStatus").textContent = `Progreso actual: ${answeredTotal} de ${questions.length} preguntas respondidas (${pct}% de acierto sobre el total).`;
+      } else {
+        document.getElementById("finalStatus").textContent = `Examen completado · Puntuación final: ${pct}% (${score} aciertos de ${questions.length}).`;
+      }
+
+      const blockScoresDiv = document.getElementById("blockScores");
+      blockScoresDiv.innerHTML = blocks
+        .map(
+          (b) => `
+          <div class="block-stat">
+            <strong>${b.title.split(".")[0]}</strong>
+            ${b.title.split(". ")[1]}: <strong>${blockHits[b.id]} / ${b.count}</strong>
+          </div>`
+        )
+        .join("");
+    }
+
+    function resetQuiz() {
+      if (Object.keys(userAnswers).length > 0 && !confirm("¿Seguro que quieres reiniciar todas las respuestas?")) {
+        return;
+      }
+      userAnswers = {};
+      renderQuiz();
+      startTimer();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    initDate();
+    renderQuiz();
+    startTimer();
+  </script>
+</body>
+</html>
